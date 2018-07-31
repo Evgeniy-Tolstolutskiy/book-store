@@ -1,0 +1,20 @@
+spring:
+  profiles:
+    active: dev
+  application:
+    name: bookstore
+  liquibase:
+    change-log: classpath:schema/changelog.xml
+
+server:
+  port: 8090
+  servlet:
+    context-path: /bookstore
+
+---
+spring:
+  profiles: dev
+  datasource:
+    url: jdbc:postgresql://localhost:5435/bookstore
+    username: postgres
+    password: postgres

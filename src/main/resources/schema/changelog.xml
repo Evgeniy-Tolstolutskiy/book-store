@@ -1,0 +1,39 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
+    <changeSet author="evgeniy" id="create tables">
+        <createTable tableName="user">
+            <column name="id" type="INT" autoIncrement="true"/>
+            <column name="username" type="VARCHAR"/>
+            <column name="password" type="VARCHAR"/>
+            <column name="email" type="VARCHAR"/>
+            <column name="birthday" type="TIMESTAMP(6) WITHOUT TIME ZONE"/>
+            <column name="gender" type="VARCHAR(1)"/>
+            <column name="role" type="INT"/>
+        </createTable>
+        <createTable tableName="book">
+            <column name="id" type="INT" autoIncrement="true"/>
+            <column name="name" type="VARCHAR"/>
+            <column name="photo_link" type="VARCHAR"/>
+            <column name="count" type="INT"/>
+            <column name="price" type="DOUBLE"/>
+        </createTable>
+        <createTable tableName="order">
+            <column name="id" type="INT" autoIncrement="true"/>
+            <column name="date" type="TIMESTAMP(6) WITHOUT TIME ZONE"/>
+            <column name="price" type="DOUBLE"/>
+        </createTable>
+        <createTable tableName="order_book">
+            <column name="id" type="INT" autoIncrement="true"/>
+            <column name="order_id" type="INT"/>
+            <column name="book_id" type="INT"/>
+            <column name="count" type="INT"/>
+        </createTable>
+    </changeSet>
+    <changeSet id="add visibile column to books table" author="evgeniy">
+        <addColumn tableName="book">
+            <column name="visible" type="BOOLEAN"/>
+        </addColumn>
+    </changeSet>
+</databaseChangeLog>

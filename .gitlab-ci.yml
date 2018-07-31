@@ -1,0 +1,57 @@
+stages:
+  - build
+  - docker
+
+cache:
+  key: "$CI_BUILD_REF_NAME-$CI_BUILD_REF"
+  paths:
+    - target/bookstore-*.jar
+
+job_build:
+  image: maven:3-jdk-8
+  stage: build
+  script:
+    - mvn package
+  variables:
+    MAVEN_OPTS: -Dmaven.repo.local=/cache/maven/repository
+
+  tags:
+    - docker
+
+job_docker_build:
+  image: gitlab/dind
+  stage: docker
+  
+  only:
+    - master
+  
+  script: 
+    - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN hub.githost.io
+    - docker build -t hub.githost.io/teleg/bookstore .
+    - docker push hub.githost.io/teleg/bookstore
+
+  dependencies:
+    - job_build
+  
+  tags:
+    - dind
+
+job_docker_tag:
+  image: gitlab/dind
+  stage: docker
+
+  only:
+    - tags
+
+
+  script:
+    - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN hub.githost.io
+    - docker build -t hub.githost.io/teleg/bookstore .
+    - docker tag hub.githost.io/teleg/socialnet hub.githost.io/teleg/bookstore:$CI_COMMIT_TAG
+    - docker push hub.githost.io/teleg/bookstore:$CI_COMMIT_TAG
+
+  dependencies:
+    - job_build
+
+  tags:
+    - dind
