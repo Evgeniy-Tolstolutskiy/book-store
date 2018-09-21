@@ -5,6 +5,13 @@ spring:
     name: bookstore
   liquibase:
     change-log: classpath:schema/changelog.xml
+  security:
+    basic:
+      enabled: false
+    jwtSignature: 123456
+    defaultClient: book-shop
+    accessTokenValiditySeconds: 60 #one minute
+    refreshTokenValiditySeconds: 1209600 # two weeks
 
 server:
   port: 8090

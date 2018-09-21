@@ -36,4 +36,23 @@
             <column name="visible" type="BOOLEAN"/>
         </addColumn>
     </changeSet>
+    <changeSet id="change role columnt type to string" author="evgeniy">
+        <modifyDataType columnName="role"
+                        newDataType="VARCHAR(10)"
+                        tableName="user"/>
+    </changeSet>
+    <changeSet id="add relations between tables and primary keys" author="evgeniy">
+        <addPrimaryKey columnNames="id" constraintName="user_pkey" tableName="user"/>
+        <addPrimaryKey columnNames="id" constraintName="book_pkey" tableName="book"/>
+        <addPrimaryKey columnNames="id" constraintName="order_pkey" tableName="order"/>
+        <addPrimaryKey columnNames="id" constraintName="order_book_pkey" tableName="order_book"/>
+
+        <addColumn tableName="order">
+            <column name="user_id" type="INT"/>
+        </addColumn>
+        <addForeignKeyConstraint baseColumnNames="user_id" baseTableName="order"
+                                 constraintName="order_user_fk" deferrable="false"
+                                 initiallyDeferred="false" onDelete="CASCADE" onUpdate="NO ACTION"
+                                 referencedColumnNames="id" referencedTableName="user"/>
+    </changeSet>
 </databaseChangeLog>
