@@ -12,8 +12,6 @@ import org.springframework.security.oauth2.provider.OAuth2Authentication;
 import org.springframework.security.oauth2.provider.OAuth2Request;
 import org.springframework.security.oauth2.provider.endpoint.TokenEndpoint;
 import org.springframework.security.oauth2.provider.token.AuthorizationServerTokenServices;
-import org.springframework.security.oauth2.provider.token.DefaultTokenServices;
-import org.springframework.security.oauth2.provider.token.ResourceServerTokenServices;
 import org.springframework.stereotype.Service;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 
@@ -31,11 +29,8 @@ public class Oauth2AuthenticationService {
     private final PasswordEncoder passwordEncoder;
     private final UserService userService;
 
-    public Oauth2AuthenticationService(
-        AuthorizationServerEndpointsConfiguration configuration,
-        TokenEndpoint tokenEndpoint,
-        SecurityConfigBean securityConfigBean,
-        PasswordEncoder passwordEncoder,
+    public Oauth2AuthenticationService(AuthorizationServerEndpointsConfiguration configuration,
+        TokenEndpoint tokenEndpoint, SecurityConfigBean securityConfigBean, PasswordEncoder passwordEncoder,
         UserService userService) {
         this.configuration = configuration;
         this.tokenEndpoint = tokenEndpoint;
@@ -46,17 +41,17 @@ public class Oauth2AuthenticationService {
 
     public OAuth2AccessToken loginViaEmail(String email, String password) {
         User user = userService.findByEmail(email);
-        if (user != null && passwordEncoder.matches(password, user.getPassword())) {
-            return createOauth2Token(user);
+        if (user != null) {
+            if (passwordEncoder.matches(password, user.getPassword())) {
+                return createOauth2Token(user);
+            }
         }
-        throw new RuntimeException("username or password is wrong");
+        throw new RuntimeException("User not found");
     }
 
-    public OAuth2AccessToken getRefreshToken(String refreshToken)
-        throws HttpRequestMethodNotSupportedException {
+    public OAuth2AccessToken getRefreshToken(String refreshToken) throws HttpRequestMethodNotSupportedException {
         Principal principal = securityConfigBean::getDefaultClient;
-        Authentication authentication = new UsernamePasswordAuthenticationToken(
-            principal, null, new ArrayList<>());
+        Authentication authentication = new UsernamePasswordAuthenticationToken(principal, null, new ArrayList<>());
         Map<String, String> parameters = new HashMap<>();
         parameters.put("grant_type", "refresh_token");
         parameters.put("refresh_token", refreshToken);
@@ -67,16 +62,11 @@ public class Oauth2AuthenticationService {
 
     public OAuth2AccessToken createOauth2Token(User user) {
         OAuth2Request oauth2Request = new OAuth2Request(new HashMap<>(), securityConfigBean.getDefaultClient(),
-            user.getAuthorities(), true, new HashSet<>(), new HashSet<>(), null, new HashSet<>(),
-            new HashMap<>());
-
-        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
-            user, null, new ArrayList<>());
-
+            user.getAuthorities(), true, new HashSet<>(), new HashSet<>(), null, new HashSet<>(), new HashMap<>());
+        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(user, null,
+            user.getAuthorities());
         OAuth2Authentication auth = new OAuth2Authentication(oauth2Request, authenticationToken);
-
         AuthorizationServerTokenServices tokenService = configuration.getEndpointsConfigurer().getTokenServices();
-
         return tokenService.createAccessToken(auth);
     }
 }

@@ -1,15 +1,14 @@
 package com.tolstolutskyi.security;
 
 import com.tolstolutskyi.config.SecurityConfigBean;
+import com.tolstolutskyi.service.UserService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.config.annotation.configurers.ClientDetailsServiceConfigurer;
@@ -25,22 +24,17 @@ import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenCo
 import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
 
 @Configuration
-@EnableGlobalMethodSecurity
-public class AuthSecurityConfig extends WebSecurityConfigurerAdapter {
+@EnableGlobalMethodSecurity(prePostEnabled = true)
+public class SecurityConfig extends WebSecurityConfigurerAdapter {
+    private final SecurityConfigBean securityConfigBean;
 
-    private final SecurityConfigBean securityConfig;
-
-    public AuthSecurityConfig(SecurityConfigBean securityConfig) {
-        this.securityConfig = securityConfig;
+    public SecurityConfig(SecurityConfigBean securityConfigBean) {
+        this.securityConfigBean = securityConfigBean;
     }
 
-    @Override
-    public void configure(HttpSecurity http) throws Exception {
-        http.anonymous()
-            .and().authorizeRequests()
-                .antMatchers("/login/**").anonymous()
-                .anyRequest().authenticated()
-            .and().csrf().disable();
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
     }
 
     @Bean
@@ -50,14 +44,9 @@ public class AuthSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Bean
     public JwtAccessTokenConverter accessTokenConverter() {
-        JwtAccessTokenConverter converter = new JwtAccessTokenConverter();
-        converter.setSigningKey(securityConfig.getJwtSignature());
-        return converter;
-    }
-
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
+        JwtAccessTokenConverter tokenConverter = new JwtAccessTokenConverter();
+        tokenConverter.setSigningKey(securityConfigBean.getJwtSignature());
+        return tokenConverter;
     }
 
     @Bean
@@ -65,49 +54,53 @@ public class AuthSecurityConfig extends WebSecurityConfigurerAdapter {
     public DefaultTokenServices tokenServices() {
         DefaultTokenServices defaultTokenServices = new DefaultTokenServices();
         defaultTokenServices.setTokenStore(tokenStore());
+        defaultTokenServices.setTokenEnhancer(accessTokenConverter());
         defaultTokenServices.setSupportRefreshToken(true);
         return defaultTokenServices;
     }
 
     @Configuration
     @EnableAuthorizationServer
-    public class OAuth2AuthorizationServerConfig extends AuthorizationServerConfigurerAdapter {
-        private final SecurityConfigBean securityConfig;
+    public class AuthServerOAuth2Config extends AuthorizationServerConfigurerAdapter {
+        private final SecurityConfigBean securityConfigBean;
 
-        private final UserDetailsService userDetailsService;
-
-        public OAuth2AuthorizationServerConfig(SecurityConfigBean securityConfig,
-            UserDetailsService userDetailsService) {
-            this.securityConfig = securityConfig;
-            this.userDetailsService = userDetailsService;
-        }
-
-        @Override
-        public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
-            endpoints.tokenStore(tokenStore())
-                .userDetailsService(userDetailsService)
-                .authenticationManager(authenticationManager())
-                .reuseRefreshTokens(false)
-                .accessTokenConverter(accessTokenConverter());
+        public AuthServerOAuth2Config(SecurityConfigBean securityConfigBean) {
+            this.securityConfigBean = securityConfigBean;
         }
 
         @Override
         public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
             clients.inMemory()
-                .withClient(securityConfig.getDefaultClient())
-                .accessTokenValiditySeconds(securityConfig.getAccessTokenValiditySeconds())
-                .refreshTokenValiditySeconds(securityConfig.getRefreshTokenValiditySeconds())
+                .withClient(securityConfigBean.getDefaultClient())
+                .accessTokenValiditySeconds(securityConfigBean.getAccessTokenValiditySeconds())
+                .refreshTokenValiditySeconds(securityConfigBean.getRefreshTokenValiditySeconds())
                 .scopes("trust")
                 .authorizedGrantTypes("refresh_token");
+        }
+
+        @Override
+        public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
+            endpoints.tokenServices(tokenServices())
+                .reuseRefreshTokens(false);
         }
     }
 
     @Configuration
     @EnableResourceServer
-    public class OAuth2ResourceServerConfig extends ResourceServerConfigurerAdapter {
+    public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter {
+        @Value("${spring.security.resourceId}")
+        private String resourceId;
+
         @Override
-        public void configure(ResourceServerSecurityConfigurer config) {
-            config.tokenServices(tokenServices());
+        public void configure(ResourceServerSecurityConfigurer resources) {
+            resources.resourceId(resourceId);
+        }
+
+        @Override
+        public void configure(HttpSecurity http) throws Exception {
+            http.authorizeRequests().antMatchers("/login/**").permitAll()
+                .and().authorizeRequests().anyRequest().authenticated()
+                .and().csrf().disable();
         }
     }
 }

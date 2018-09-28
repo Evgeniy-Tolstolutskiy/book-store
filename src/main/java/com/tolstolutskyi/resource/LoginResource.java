@@ -3,11 +3,11 @@ package com.tolstolutskyi.resource;
 import com.tolstolutskyi.dto.LoginData;
 import com.tolstolutskyi.service.Oauth2AuthenticationService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.oauth2.common.exceptions.InvalidTokenException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
@@ -22,17 +22,13 @@ public class LoginResource {
     }
 
     @PostMapping("/email")
-    public ResponseEntity loginViaEmail(@RequestBody @Valid LoginData loginData) {
+    public ResponseEntity loginByEmail(@RequestBody @Valid LoginData loginData) {
         return ResponseEntity
             .ok(oauth2AuthenticationService.loginViaEmail(loginData.getEmail(), loginData.getPassword()));
     }
 
-    public ResponseEntity refreshToken(@RequestBody String token)
-        throws HttpRequestMethodNotSupportedException {
-        try {
-            return ResponseEntity.ok(oauth2AuthenticationService.getRefreshToken(token));
-        } catch (InvalidTokenException e) {
-            return ResponseEntity.badRequest().build();
-        }
+    @PostMapping("/refresh")
+    public ResponseEntity refreshToken(@RequestParam String refreshToken) throws HttpRequestMethodNotSupportedException {
+        return ResponseEntity.ok(oauth2AuthenticationService.getRefreshToken(refreshToken));
     }
 }

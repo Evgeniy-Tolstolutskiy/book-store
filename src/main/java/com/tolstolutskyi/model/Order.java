@@ -6,12 +6,14 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import java.util.Date;
 
 @Data
 @Entity
-@Table(name = "book")
-public class Book {
+@Table(name = "order")
+public class Order {
     @Id
     @GeneratedValue
-    public Long id;
+    private Long id;
+    private Date date;
 }

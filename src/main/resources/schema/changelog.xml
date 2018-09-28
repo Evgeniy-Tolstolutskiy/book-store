@@ -55,4 +55,9 @@
                                  initiallyDeferred="false" onDelete="CASCADE" onUpdate="NO ACTION"
                                  referencedColumnNames="id" referencedTableName="user"/>
     </changeSet>
+
+
+    <changeSet author="evgeniy" id="rename user to user_info">
+        <renameTable newTableName="user_info" oldTableName="user" schemaName="public"/>
+    </changeSet>
 </databaseChangeLog>
