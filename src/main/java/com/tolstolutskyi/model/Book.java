@@ -13,5 +13,5 @@ import javax.persistence.Table;
 public class Book {
     @Id
     @GeneratedValue
-    public Long id;
+    private Long id;
 }

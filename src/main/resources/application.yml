@@ -10,7 +10,8 @@ spring:
     basic:
       enabled: false
     jwtSignature: 123456
-    defaultClient: bookstore_client
+    client: bookstore_client
+    secret: bookstore_secret
     accessTokenValiditySeconds: 600
     refreshTokenValiditySeconds: 1209600 # two weeks
 

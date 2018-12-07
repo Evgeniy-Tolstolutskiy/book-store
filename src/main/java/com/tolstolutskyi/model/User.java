@@ -1,6 +1,7 @@
 package com.tolstolutskyi.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -13,6 +14,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Date;
 
 @Data
 @Entity
@@ -25,8 +27,22 @@ public class User implements UserDetails {
     private String name;
     @JsonIgnore
     private String password;
+    private String email;
+    private Date birthday;
+    private String gender;
     @JsonIgnore
     private String role;
+
+    @JsonIgnore
+    @Override
+    public String getPassword() {
+        return password;
+    }
+
+    @JsonProperty
+    public void setPassword(String password) {
+        this.password = password;
+    }
 
     @JsonIgnore
     @Override

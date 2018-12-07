@@ -1,30 +1,35 @@
 package com.tolstolutskyi.resource;
 
 import com.tolstolutskyi.model.User;
-import com.tolstolutskyi.model.projection.UserProjection;
 import com.tolstolutskyi.repository.UserRepository;
-import org.springframework.data.projection.ProjectionFactory;
+import com.tolstolutskyi.service.UserService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
 import java.security.Principal;
 
 @RestController
 @RequestMapping("/users")
 public class UserResource {
-    private final UserRepository userRepository;
-    private final ProjectionFactory projectionFactory;
+    private final UserService userService;
 
-    public UserResource(UserRepository userRepository, ProjectionFactory projectionFactory) {
-        this.userRepository = userRepository;
-        this.projectionFactory = projectionFactory;
+    public UserResource(UserService userService) {
+        this.userService = userService;
+    }
+
+    @PostMapping("/registration")
+    public ResponseEntity register(@RequestBody @Valid User user) {
+        userService.register(user);
+        return ResponseEntity.ok().build();
     }
 
     @GetMapping("/me")
-    public ResponseEntity getById(Principal principal) {
-        User user = userRepository.findById(Long.valueOf(principal.getName())).orElseThrow(RuntimeException::new);
-        return ResponseEntity.ok(projectionFactory.createProjection(UserProjection.class, user));
+    public ResponseEntity<User> getUser(Principal principal) {
+        return ResponseEntity.ok(userService.findById(Long.valueOf(principal.getName())));
     }
 }

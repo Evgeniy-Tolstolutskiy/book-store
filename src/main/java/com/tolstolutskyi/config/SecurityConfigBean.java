@@ -9,7 +9,8 @@ import org.springframework.stereotype.Component;
 @ConfigurationProperties(prefix = "spring.security")
 public class SecurityConfigBean {
     private String jwtSignature;
-    private String defaultClient;
+    private String client;
+    private String secret;
     private Integer accessTokenValiditySeconds;
     private Integer refreshTokenValiditySeconds;
 }
