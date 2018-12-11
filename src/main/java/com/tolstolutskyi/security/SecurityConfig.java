@@ -112,6 +112,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         @Override
         public void configure(HttpSecurity http) throws Exception {
             http.authorizeRequests().antMatchers(EVERYBODY_ALLOWED_URLS).permitAll()
+                .and().authorizeRequests().antMatchers("/users").hasRole("ADMIN")
                 .and().authorizeRequests().anyRequest().authenticated()
                 .and().csrf().disable();
         }
