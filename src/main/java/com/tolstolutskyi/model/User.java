@@ -24,6 +24,7 @@ public class User implements UserDetails {
     @GeneratedValue
     private Long id;
     @Column(name = "username")
+    @JsonProperty("username")
     private String name;
     @JsonIgnore
     private String password;
