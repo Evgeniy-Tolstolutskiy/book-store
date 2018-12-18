@@ -31,9 +31,9 @@
             <column name="count" type="INT"/>
         </createTable>
     </changeSet>
-    <changeSet id="add visibile column to books table" author="evgeniy">
+    <changeSet id="add visibile column to table books" author="evgeniy">
         <addColumn tableName="book">
-            <column name="visible" type="BOOLEAN"/>
+            <column name="visible" type="BOOLEAN" defaultValue="true"/>
         </addColumn>
     </changeSet>
     <changeSet id="change role columnt type to string" author="evgeniy">
@@ -59,5 +59,22 @@
 
     <changeSet author="evgeniy" id="rename user to user_info">
         <renameTable newTableName="user_info" oldTableName="user" schemaName="public"/>
+    </changeSet>
+    <changeSet id="trigger on decrease book count" author="evgeniy">
+        <sql>
+            CREATE OR REPLACE FUNCTION decrease_book_count()
+            RETURNS trigger AS'
+            BEGIN
+            UPDATE book AS b SET count = count - NEW.count WHERE b.id = NEW.book_id;
+            RETURN NULL;
+            END;'
+            LANGUAGE 'plpgsql';
+
+            CREATE TRIGGER order_book_after_insert
+                AFTER INSERT
+                ON order_book
+                FOR EACH ROW
+                EXECUTE PROCEDURE decrease_book_count();
+        </sql>
     </changeSet>
 </databaseChangeLog>

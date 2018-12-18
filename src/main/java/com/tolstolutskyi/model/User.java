@@ -2,6 +2,8 @@ package com.tolstolutskyi.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.tolstolutskyi.common.UnixDateSerializer;
 import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -10,6 +12,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import java.util.Collection;
@@ -21,7 +24,7 @@ import java.util.Date;
 @Table(name = "user_info")
 public class User implements UserDetails {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column(name = "username")
     @JsonProperty("username")
@@ -29,6 +32,7 @@ public class User implements UserDetails {
     @JsonIgnore
     private String password;
     private String email;
+    @JsonSerialize(using = UnixDateSerializer.class)
     private Date birthday;
     private String gender;
     @JsonIgnore

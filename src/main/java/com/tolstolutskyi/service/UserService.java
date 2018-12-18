@@ -33,15 +33,20 @@ public class UserService implements UserDetailsService {
         return user;
     }
 
-    @Transactional
-    public void register(User user) {
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-        user.setRole("ROLE_USER");
-        userRepository.save(user);
-    }
-
     @Transactional(readOnly = true)
     public User findById(Long id) {
         return userRepository.findById(id).orElse(null);
+    }
+
+    @Transactional
+    public void register(User user) {
+        user.setRole("ROLE_USER");
+        save(user);
+    }
+
+    @Transactional
+    public void save(User user) {
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        userRepository.save(user);
     }
 }
