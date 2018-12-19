@@ -15,9 +15,9 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
@@ -34,7 +34,7 @@ public class User implements UserDetails {
     @NotNull
     private String name;
     @JsonIgnore
-    @Min(6)
+    @Size(min = 6)
     private String password;
     @NotNull
     @Pattern(regexp = "^(.+)@(.+)$")
