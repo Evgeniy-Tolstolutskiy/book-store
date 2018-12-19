@@ -5,6 +5,8 @@ import com.tolstolutskyi.model.Order;
 import com.tolstolutskyi.repository.BookOrderRepository;
 import com.tolstolutskyi.repository.OrderRepository;
 import com.tolstolutskyi.resource.validator.CreateOrderValidator;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,7 +18,6 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.validation.Valid;
 import java.security.Principal;
 import java.util.Date;
-import java.util.List;
 
 @RestController
 @RequestMapping("/orders")
@@ -33,8 +34,8 @@ public class OrderResource {
     }
 
     @GetMapping("/my")
-    public ResponseEntity<List<Order>> getOrders(Principal principal) {
-        return ResponseEntity.ok(orderRepository.findOrdersByUserId(Long.valueOf(principal.getName())));
+    public ResponseEntity<Page<Order>> getOrders(Principal principal, Pageable pageable) {
+        return ResponseEntity.ok(orderRepository.findOrdersByUserId(Long.valueOf(principal.getName()), pageable));
     }
 
     @PostMapping

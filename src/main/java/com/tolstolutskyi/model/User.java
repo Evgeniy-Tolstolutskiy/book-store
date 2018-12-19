@@ -15,6 +15,9 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
@@ -28,14 +31,22 @@ public class User implements UserDetails {
     private Long id;
     @Column(name = "username")
     @JsonProperty("username")
+    @NotNull
     private String name;
     @JsonIgnore
+    @Min(6)
     private String password;
+    @NotNull
+    @Pattern(regexp = "^(.+)@(.+)$")
     private String email;
     @JsonSerialize(using = UnixDateSerializer.class)
+    @NotNull
     private Date birthday;
+    @NotNull
+    @Pattern(regexp = "M|F")
     private String gender;
     @JsonIgnore
+    @Column(updatable = false)
     private String role;
 
     @JsonIgnore

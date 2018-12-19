@@ -1,7 +1,6 @@
 package com.tolstolutskyi.resource;
 
 import com.tolstolutskyi.model.User;
-import com.tolstolutskyi.repository.UserRepository;
 import com.tolstolutskyi.service.UserService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;

@@ -1,14 +1,19 @@
 spring:
+  liquibase:
+    change-log: classpath:schema/changelog.xml
+  security:
+    resourceId: bookstore
+    basic:
+      enabled: false
+    jwtSignature: 123456
+    client: bookstore_client
+    secret: bookstore_secret
+    accessTokenValiditySeconds: 600
+    refreshTokenValiditySeconds: 1209600 # two weeks
   datasource:
-    read:
-      jdbcUrl: jdbc:h2:mem:socialnet;DB_CLOSE_DELAY=-1
-      username: sa
-      password: sa
-      driver-class-name: org.h2.Driver
-    write:
-      jdbcUrl: jdbc:h2:mem:socialnet;DB_CLOSE_DELAY=-1
-      username: sa
-      password: sa
-      driver-class-name: org.h2.Driver
+    jdbcUrl: jdbc:h2:mem:socialnet;DB_CLOSE_DELAY=-1
+    username: sa
+    password: sa
+    driver-class-name: org.h2.Driver
   liquibase:
     change-log: classpath:schema/changelog.xml

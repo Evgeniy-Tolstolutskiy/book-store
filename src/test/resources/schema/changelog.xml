@@ -1,0 +1,63 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
+    <changeSet author="evgeniy" id="create tables">
+        <createTable tableName="user">
+            <column name="id" type="INT" autoIncrement="true"/>
+            <column name="username" type="VARCHAR"/>
+            <column name="password" type="VARCHAR"/>
+            <column name="email" type="VARCHAR"/>
+            <column name="birthday" type="TIMESTAMP(6) WITHOUT TIME ZONE"/>
+            <column name="gender" type="VARCHAR(1)"/>
+            <column name="role" type="INT"/>
+        </createTable>
+        <createTable tableName="book">
+            <column name="id" type="INT" autoIncrement="true"/>
+            <column name="name" type="VARCHAR"/>
+            <column name="photo_link" type="VARCHAR"/>
+            <column name="count" type="INT"/>
+            <column name="price" type="DOUBLE"/>
+        </createTable>
+        <createTable tableName="order">
+            <column name="id" type="INT" autoIncrement="true"/>
+            <column name="date" type="TIMESTAMP(6) WITHOUT TIME ZONE"/>
+            <column name="price" type="DOUBLE"/>
+        </createTable>
+        <createTable tableName="order_book">
+            <column name="id" type="INT" autoIncrement="true"/>
+            <column name="order_id" type="INT"/>
+            <column name="book_id" type="INT"/>
+            <column name="count" type="INT"/>
+        </createTable>
+    </changeSet>
+    <changeSet id="add visibile column to table books" author="evgeniy">
+        <addColumn tableName="book">
+            <column name="visible" type="BOOLEAN" defaultValue="true"/>
+        </addColumn>
+    </changeSet>
+    <changeSet id="change role columnt type to string" author="evgeniy">
+        <modifyDataType columnName="role"
+                        newDataType="VARCHAR(10)"
+                        tableName="user"/>
+    </changeSet>
+    <changeSet id="add relations between tables and primary keys" author="evgeniy">
+        <addPrimaryKey columnNames="id" constraintName="user_pkey" tableName="user"/>
+        <addPrimaryKey columnNames="id" constraintName="book_pkey" tableName="book"/>
+        <addPrimaryKey columnNames="id" constraintName="order_pkey" tableName="order"/>
+        <addPrimaryKey columnNames="id" constraintName="order_book_pkey" tableName="order_book"/>
+
+        <addColumn tableName="order">
+            <column name="user_id" type="INT"/>
+        </addColumn>
+        <addForeignKeyConstraint baseColumnNames="user_id" baseTableName="order"
+                                 constraintName="order_user_fk" deferrable="false"
+                                 initiallyDeferred="false" onDelete="CASCADE" onUpdate="NO ACTION"
+                                 referencedColumnNames="id" referencedTableName="user"/>
+    </changeSet>
+
+
+    <changeSet author="evgeniy" id="rename user to user_info">
+        <renameTable newTableName="user_info" oldTableName="user" schemaName="public"/>
+    </changeSet>
+</databaseChangeLog>

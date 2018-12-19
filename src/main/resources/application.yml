@@ -25,3 +25,14 @@ spring:
     url: jdbc:postgresql://localhost:5435/bookstore
     username: postgres
     password: postgres
+    driver-class-name: org.postgresql.Driver
+---
+spring:
+  profiles: prod
+  datasource:
+    url: ${jdbcUrl}
+    username: ${dbUsername}
+    password: ${dbpassword}
+    driver-class-name: org.postgresql.Driver
+server:
+  port: ${port}

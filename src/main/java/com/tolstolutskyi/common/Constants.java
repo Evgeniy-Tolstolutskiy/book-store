@@ -5,6 +5,8 @@ public final class Constants {
     }
 
     public static final class UrlRestrictions {
-        public static final String[] EVERYBODY_ALLOWED_URLS = { "/users/registration" };
+        public static final String[] EVERYBODY_ALLOWED_URLS = {
+            "/users/registration"
+        };
     }
 }

@@ -8,7 +8,7 @@ cache:
     - target/bookstore-*.jar
 
 job_build:
-  image: maven:3-jdk-8
+  image: maven:3-jdk-9
   stage: build
   script:
     - mvn package
@@ -27,8 +27,8 @@ job_docker_build:
   
   script: 
     - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN hub.githost.io
-    - docker build -t hub.githost.io/teleg/bookstore .
-    - docker push hub.githost.io/teleg/bookstore
+    - docker build -t hub.githost.io/malinovsky/tolstolutskyi_bookstore .
+    - docker push hub.githost.io/malinovsky/tolstolutskyi_bookstore
 
   dependencies:
     - job_build
@@ -46,9 +46,9 @@ job_docker_tag:
 
   script:
     - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN hub.githost.io
-    - docker build -t hub.githost.io/teleg/bookstore .
-    - docker tag hub.githost.io/teleg/socialnet hub.githost.io/teleg/bookstore:$CI_COMMIT_TAG
-    - docker push hub.githost.io/teleg/bookstore:$CI_COMMIT_TAG
+    - docker build -t hub.githost.io/malinovsky/tolstolutskyi_bookstore .
+    - docker tag hub.githost.io/teleg/socialnet hub.githost.io/malinovsky/tolstolutskyi_bookstore:$CI_COMMIT_TAG
+    - docker push hub.githost.io/malinovsky/tolstolutskyi_bookstore:$CI_COMMIT_TAG
 
   dependencies:
     - job_build
