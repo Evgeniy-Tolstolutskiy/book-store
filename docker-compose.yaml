@@ -1,6 +1,20 @@
 version: '3'
 
+networks:
+  network1:
+
 services:
+  server:
+    depends_on:
+      - postgresql
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    image: bookstore
+    ports:
+      - 8090
+    networks:
+      - network1
   postgresql:
     image: 'bitnami/postgresql:9.6'
     ports:
@@ -15,6 +29,8 @@ services:
       - POSTGRES_INITDB_ARGS="--encoding=utf8"
     volumes:
       - volume-postgres:/bitnami
+    networks:
+      - network1
 
 volumes:
   volume-postgres:

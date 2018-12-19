@@ -11,7 +11,7 @@ spring:
     accessTokenValiditySeconds: 600
     refreshTokenValiditySeconds: 1209600 # two weeks
   datasource:
-    jdbcUrl: jdbc:h2:mem:socialnet;DB_CLOSE_DELAY=-1
+    jdbcUrl: jdbc:h2:mem:bookstore;DB_CLOSE_DELAY=-1
     username: sa
     password: sa
     driver-class-name: org.h2.Driver
