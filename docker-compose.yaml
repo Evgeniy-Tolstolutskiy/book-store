@@ -12,9 +12,15 @@ services:
       dockerfile: Dockerfile
     image: bookstore
     ports:
-      - 8090
+      - 8090:8090
     networks:
       - network1
+    environment:
+      - jdbcUrl=jdbc:postgresql://postgresql/bookstore
+      - port=8090
+      - dbUsername=postgres
+      - dbPassword=postgres
+      - SPA=prod
   postgresql:
     image: 'bitnami/postgresql:9.6'
     ports:
