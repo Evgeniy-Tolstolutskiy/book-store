@@ -23,7 +23,6 @@ spring:
   profiles: dev
   datasource:
     url: jdbc:postgresql://localhost:5435/bookstore
-    url: jdbc:postgresql://localhost:5435/bookstore
     username: postgres
     password: postgres
     driver-class-name: org.postgresql.Driver
