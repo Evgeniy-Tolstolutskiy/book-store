@@ -18,7 +18,7 @@
         <liquibase.version>3.5.3</liquibase.version>
         <postgresql.version>42.1.4</postgresql.version>
         <h2.version>1.4.193</h2.version>
-        <spring-security-oauth2.version>2.2.1.RELEASE</spring-security-oauth2.version>
+        <spring-security-oauth2.version>2.2.5.RELEASE</spring-security-oauth2.version>
         <spring-security-jwt.version>1.0.9.RELEASE</spring-security-jwt.version>
     </properties>
 
