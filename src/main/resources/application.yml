@@ -15,6 +15,11 @@ spring:
     accessTokenValiditySeconds: 600
     refreshTokenValiditySeconds: 1209600 # two weeks
 
+cloudinary:
+    cloudName: do9a3u2vv
+    apiKey: 145895683742271
+    apiSecret: XfmsJQwf5v6c9guD-f0C2msT9oU
+
 server:
   port: 8090
 
