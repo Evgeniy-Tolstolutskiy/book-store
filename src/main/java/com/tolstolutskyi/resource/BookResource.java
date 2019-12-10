@@ -1,15 +1,14 @@
 package com.tolstolutskyi.resource;
 
-import com.tolstolutskyi.model.Book;
-import com.tolstolutskyi.repository.BookRepository;
 import com.tolstolutskyi.service.BookService;
 import com.tolstolutskyi.service.ImageService;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.validation.Valid;
-import java.io.File;
 import java.io.IOException;
 
 import static com.tolstolutskyi.common.FileUtils.convert;
@@ -25,14 +24,8 @@ public class BookResource {
         this.imageService = imageService;
     }
 
-    @PostMapping
-    public ResponseEntity save(@RequestBody @Valid Book book) {
-        bookService.save(book);
-        return ResponseEntity.ok().build();
-    }
-
     @PostMapping("/{id}/image")
-    public String saveImage(@PathVariable("id") long id, @RequestParam("file") MultipartFile file) throws IOException {
+    public String saveImage(@RequestParam("file") MultipartFile file, @PathVariable("id") long id) throws IOException {
         String link = imageService.saveImage(convert(file));
         bookService.setImageLink(id, link);
         return link;

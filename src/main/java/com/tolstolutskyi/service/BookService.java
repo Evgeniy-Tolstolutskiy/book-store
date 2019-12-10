@@ -6,12 +6,18 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 
+import java.io.IOException;
+
+import static com.tolstolutskyi.common.Constants.CLOUDINARY_IMAGES_URL_HOST;
+
 @Service
 public class BookService {
     private final BookRepository bookRepository;
+    private final ImageService imageService;
 
-    public BookService(BookRepository bookRepository) {
+    public BookService(BookRepository bookRepository, ImageService imageService) {
         this.bookRepository = bookRepository;
+        this.imageService = imageService;
     }
 
     @Transactional
@@ -20,7 +26,11 @@ public class BookService {
     }
 
     @Transactional
-    public void setImageLink(Long id, String link) {
+    public void setImageLink(Long id, String link) throws IOException {
+        Book book = bookRepository.findById(id).orElseGet(null);
+        if (book != null && book.getPhotoLink() != null && book.getPhotoLink().startsWith(CLOUDINARY_IMAGES_URL_HOST)) {
+            imageService.deleteImage(book.getPhotoLink());
+        }
         bookRepository.saveImage(id, link);
     }
 }

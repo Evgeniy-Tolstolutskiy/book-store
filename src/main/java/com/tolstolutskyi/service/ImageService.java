@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Collections;
 import java.util.Map;
 
 @Service
@@ -19,5 +20,11 @@ public class ImageService {
     public String saveImage(File image) throws IOException {
         Map uploadResult = cloudinary.uploader().upload(image, ObjectUtils.emptyMap());
         return uploadResult.get("url").toString();
+    }
+
+    public void deleteImage(String url) throws IOException {
+        String[] splitUrl = url.split("/");
+        String publicId = splitUrl[splitUrl.length - 1].split("\\.")[0];
+        cloudinary.uploader().destroy(publicId, Collections.emptyMap());
     }
 }
