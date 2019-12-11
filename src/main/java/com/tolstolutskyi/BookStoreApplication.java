@@ -8,12 +8,17 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
-import org.springframework.web.multipart.MultipartResolver;
+import org.springframework.data.spel.spi.EvaluationContextExtension;
+import org.springframework.security.access.expression.SecurityExpressionRoot;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 import org.springframework.web.multipart.support.MultipartFilter;
 
 @SpringBootApplication
 @Configuration
+@EnableTransactionManagement
 public class BookStoreApplication {
     public static void main(String[] args) {
         SpringApplication.run(BookStoreApplication.class);
@@ -40,5 +45,22 @@ public class BookStoreApplication {
         MultipartFilter multipartFilter = new MultipartFilter();
         multipartFilter.setMultipartResolverBeanName("multipartReso‌​lver");
         return multipartFilter;
+    }
+
+    @Bean
+    public EvaluationContextExtension evaluationContextExtension() {
+        return new EvaluationContextExtension() {
+
+            @Override
+            public String getExtensionId() {
+                return "security";
+            }
+
+            @Override
+            public SecurityExpressionRoot getRootObject() {
+                Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+                return new SecurityExpressionRoot(authentication) {};
+            }
+        };
     }
 }

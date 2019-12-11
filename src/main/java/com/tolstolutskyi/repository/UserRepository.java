@@ -16,7 +16,7 @@ import java.util.Optional;
 
 @RepositoryRestResource(collectionResourceRel = "users", path = "usersRepository", excerptProjection = UserProjection.class)
 public interface UserRepository extends PagingAndSortingRepository<User, Long> {
-    @Query("select u from User u where email = cast(:email as string)")
+    @Query("SELECT u FROM User u WHERE email = CAST(:email AS string)")
     @RestResource(exported = false)
     User findByEmail(@Param("email") String email);
 
@@ -30,6 +30,7 @@ public interface UserRepository extends PagingAndSortingRepository<User, Long> {
 
     @Override
     @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @Query(value = "SELECT * FROM user_info WHERE CAST(id AS VARCHAR) <> ?#{principal}", nativeQuery = true)
     Page<User> findAll(Pageable pageable);
 
     @Override

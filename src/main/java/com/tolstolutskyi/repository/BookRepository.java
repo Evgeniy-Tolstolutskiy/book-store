@@ -2,8 +2,11 @@ package com.tolstolutskyi.repository;
 
 import com.tolstolutskyi.model.Book;
 import com.tolstolutskyi.model.projection.BookProjection;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
@@ -13,7 +16,11 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import java.util.Optional;
 
 @RepositoryRestResource(collectionResourceRel = "books", path = "books", excerptProjection = BookProjection.class)
+@EnableJpaRepositories
 public interface BookRepository extends PagingAndSortingRepository<Book, Long> {
+    @Query(value = "SELECT * FROM book WHERE ?#{hasRole('ROLE_ADMIN')} OR (?#{hasRole('ROLE_USER')} AND visible)", nativeQuery = true)
+    Page<Book> findAll(Pageable pageable);
+
     @Override
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     <S extends Book> S save(S s);

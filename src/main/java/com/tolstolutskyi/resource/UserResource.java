@@ -5,6 +5,7 @@ import com.tolstolutskyi.resource.validator.EmailUniquenessValidator;
 import com.tolstolutskyi.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -38,8 +39,8 @@ public class UserResource {
     }
 
     @GetMapping("/me")
-    public ResponseEntity<User> getUser(Principal principal) {
-        return ResponseEntity.ok(userService.findById(Long.valueOf(principal.getName())));
+    public ResponseEntity<User> getUser(Authentication authentication) {
+        return ResponseEntity.ok(userService.findById(Long.valueOf(authentication.getName())));
     }
 
     @PutMapping

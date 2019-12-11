@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.Collections;
+import java.util.Map;
 
 import static com.tolstolutskyi.common.FileUtils.convert;
 
@@ -25,9 +27,9 @@ public class BookResource {
     }
 
     @PostMapping("/{id}/image")
-    public String saveImage(@RequestParam("file") MultipartFile file, @PathVariable("id") long id) throws IOException {
+    public Map<String, String> saveImage(@RequestParam("file") MultipartFile file, @PathVariable("id") long id) throws IOException {
         String link = imageService.saveImage(convert(file));
         bookService.setImageLink(id, link);
-        return link;
+        return Collections.singletonMap("photo", link);
     }
 }
