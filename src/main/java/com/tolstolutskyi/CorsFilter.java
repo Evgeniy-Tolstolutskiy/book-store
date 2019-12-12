@@ -29,7 +29,12 @@ public class CorsFilter implements Filter {
         response.setHeader("Access-Control-Allow-Headers",
             "Content-Type, Accept, X-Requested-With, remember-me, authorization");
 
-        chain.doFilter(req, res);
+        final HttpServletRequest httpServletRequest = (HttpServletRequest) req;
+        if("OPTIONS".equalsIgnoreCase(httpServletRequest.getMethod())) {
+            response.setStatus(HttpServletResponse.SC_OK);
+        } else {
+            chain.doFilter(req, res);
+        }
     }
 
     @Override
