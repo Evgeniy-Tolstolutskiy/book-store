@@ -54,7 +54,7 @@ public interface UserRepository extends PagingAndSortingRepository<User, Long> {
     long count();
 
     @Override
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @RestResource(exported = false)
     void deleteById(Long aLong);
 
     @Override

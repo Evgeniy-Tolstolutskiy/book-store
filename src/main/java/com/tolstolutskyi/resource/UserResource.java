@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -42,6 +43,12 @@ public class UserResource {
     @GetMapping("/me")
     public ResponseEntity<User> getUser(Principal principal) {
         return ResponseEntity.ok(userService.findById(Long.valueOf(principal.getName())));
+    }
+
+    @DeleteMapping("/me")
+    public ResponseEntity deleteUser(Principal principal) {
+        userService.deleteById(Long.valueOf(principal.getName()));
+        return ResponseEntity.ok().build();
     }
 
     @PutMapping

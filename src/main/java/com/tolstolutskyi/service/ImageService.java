@@ -23,8 +23,8 @@ public class ImageService {
     }
 
     public void deleteImage(String url) throws IOException {
-        String[] splitUrl = url.split("/");
-        String publicId = splitUrl[splitUrl.length - 1].split("\\.")[0];
+        String[] urlParts = url.split("/");
+        String publicId = urlParts[urlParts.length - 1].split("\\.")[0];
         cloudinary.uploader().destroy(publicId, Collections.emptyMap());
     }
 }

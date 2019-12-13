@@ -39,6 +39,11 @@ public class UserService implements UserDetailsService {
     }
 
     @Transactional
+    public void deleteById(Long id) {
+        userRepository.deleteById(id);
+    }
+
+    @Transactional
     public void register(User user) {
         user.setRole("ROLE_USER");
         save(user);
