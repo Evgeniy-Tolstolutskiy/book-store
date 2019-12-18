@@ -13,8 +13,6 @@ import java.io.IOException;
 import java.util.Collections;
 import java.util.Map;
 
-import static com.tolstolutskyi.common.FileUtils.convert;
-
 @RestController
 @RequestMapping("/books")
 public class BookResource {
@@ -28,7 +26,7 @@ public class BookResource {
 
     @PostMapping("/{id}/image")
     public Map<String, String> saveImage(@RequestParam("file") MultipartFile file, @PathVariable("id") long id) throws IOException {
-        String link = imageService.saveImage(convert(file));
+        String link = imageService.saveImage(file);
         bookService.setImageLink(id, link);
         return Collections.singletonMap("photo", link);
     }

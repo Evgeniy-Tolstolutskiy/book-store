@@ -43,7 +43,7 @@ public class BookStoreApplication {
     @Order(0)
     public MultipartFilter multipartFilter() {
         MultipartFilter multipartFilter = new MultipartFilter();
-        multipartFilter.setMultipartResolverBeanName("multipartReso‌​lver");
+        multipartFilter.setMultipartResolverBeanName("multipartResolver");
         return multipartFilter;
     }
 
