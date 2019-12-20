@@ -31,17 +31,6 @@
             <column name="count" type="INT"/>
         </createTable>
     </changeSet>
-    <changeSet id="insert default admin" author="evgeniy">
-        <insert tableName="user_info">
-            <column name="id" value="100000"/>
-            <column name="username" value="admin"/>
-            <column name="password" value="$2a$10$HJD5Tt4qg7s2qQtBcrPmEuCP6LFPodYEeJeyakXUppGBjzvQX82ZW"/> <!-- 12345 -->
-            <column name="email" value="admin@email.com"/>
-            <column name="birthday" value="2019-12-13 21:36:47.620506"/>
-            <column name="gender" value="M"/>
-            <column name="role" value="ROLE_ADMIN"/>
-        </insert>
-    </changeSet>
     <changeSet id="add visibile column to table books" author="evgeniy">
         <addColumn tableName="book">
             <column name="visible" type="BOOLEAN" defaultValue="true"/>
@@ -70,6 +59,69 @@
 
     <changeSet author="evgeniy" id="rename user to user_info">
         <renameTable newTableName="user_info" oldTableName="user" schemaName="public"/>
+    </changeSet>
+    <changeSet id="insert default admin" author="evgeniy">
+        <insert tableName="user_info">
+            <column name="id" value="100000"/>
+            <column name="username" value="admin"/>
+            <column name="password" value="$2a$10$HJD5Tt4qg7s2qQtBcrPmEuCP6LFPodYEeJeyakXUppGBjzvQX82ZW"/> <!-- 12345 -->
+            <column name="email" value="admin@email.com"/>
+            <column name="birthday" value="2019-12-13 21:36:47.620506"/>
+            <column name="gender" value="M"/>
+            <column name="role" value="ROLE_ADMIN"/>
+        </insert>
+    </changeSet>
+    <changeSet id="insert default books" author="evgeniy">
+        <insert tableName="book">
+            <column name="id" value="10000"/>
+            <column name="name" value="book1"/>
+            <column name="photo_link" value="https://www.adazing.com/wp-content/uploads/2019/02/open-book-clipart-06-1-300x300.png"/>
+            <column name="count" value="10"/>
+            <column name="price" value="20.5"/>
+        </insert>
+        <insert tableName="book">
+            <column name="id" value="10001"/>
+            <column name="name" value="book2"/>
+            <column name="photo_link" value="https://www.adazing.com/wp-content/uploads/2019/02/open-book-clipart-06-1-300x300.png"/>
+            <column name="count" value="10"/>
+            <column name="price" value="45"/>
+        </insert>
+	<insert tableName="book">
+            <column name="id" value="10002"/>
+            <column name="name" value="book3"/>
+            <column name="photo_link" value="https://www.adazing.com/wp-content/uploads/2019/02/open-book-clipart-06-1-300x300.png"/>
+            <column name="count" value="10"/>
+            <column name="price" value="32.8"/>
+        </insert>
+	<insert tableName="book">
+            <column name="id" value="10003"/>
+            <column name="name" value="book4"/>
+            <column name="photo_link" value="https://www.adazing.com/wp-content/uploads/2019/02/open-book-clipart-06-1-300x300.png"/>
+            <column name="count" value="10"/>
+            <column name="price" value="6.9"/>
+        </insert>
+	<insert tableName="book">
+            <column name="id" value="10004"/>
+            <column name="name" value="book5"/>
+            <column name="photo_link" value="https://www.adazing.com/wp-content/uploads/2019/02/open-book-clipart-06-1-300x300.png"/>
+            <column name="count" value="10"/>
+            <column name="price" value="21"/>
+        </insert>
+	<insert tableName="book">
+            <column name="id" value="10005"/>
+            <column name="name" value="book6"/>
+            <column name="photo_link" value="https://www.adazing.com/wp-content/uploads/2019/02/open-book-clipart-06-1-300x300.png"/>
+            <column name="count" value="10"/>
+            <column name="price" value="32"/>
+        </insert>
+	<insert tableName="book">
+            <column name="id" value="10006"/>
+            <column name="name" value="book7"/>
+            <column name="photo_link" value="https://www.adazing.com/wp-content/uploads/2019/02/open-book-clipart-06-1-300x300.png"/>
+            <column name="count" value="10"/>
+            <column name="price" value="75"/>
+	    <column name="visible" value="false"/>
+        </insert>
     </changeSet>
     <changeSet id="trigger on decrease book count" author="evgeniy">
         <sql>
