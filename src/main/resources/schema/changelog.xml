@@ -31,6 +31,17 @@
             <column name="count" type="INT"/>
         </createTable>
     </changeSet>
+    <changeSet id="insert default admin" author="evgeniy">
+        <insert tableName="user_info">
+            <column name="id" value="100000"/>
+            <column name="username" value="admin"/>
+            <column name="password" value="$2a$10$HJD5Tt4qg7s2qQtBcrPmEuCP6LFPodYEeJeyakXUppGBjzvQX82ZW"/> <!-- 12345 -->
+            <column name="email" value="admin@email.com"/>
+            <column name="birthday" value="2019-12-13 21:36:47.620506"/>
+            <column name="gender" value="M"/>
+            <column name="role" value="ROLE_ADMIN"/>
+        </insert>
+    </changeSet>
     <changeSet id="add visibile column to table books" author="evgeniy">
         <addColumn tableName="book">
             <column name="visible" type="BOOLEAN" defaultValue="true"/>

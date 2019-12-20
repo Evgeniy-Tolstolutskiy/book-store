@@ -18,7 +18,8 @@ import java.util.Optional;
 @RepositoryRestResource(collectionResourceRel = "books", path = "books", excerptProjection = BookProjection.class)
 @EnableJpaRepositories
 public interface BookRepository extends PagingAndSortingRepository<Book, Long> {
-    @Query(value = "SELECT * FROM book WHERE ?#{hasRole('ROLE_ADMIN')} OR (?#{hasRole('ROLE_USER')} AND visible)", nativeQuery = true)
+    @Query(value = "SELECT * FROM book WHERE ?#{hasRole('ROLE_ADMIN')} OR (?#{hasRole('ROLE_USER')} AND visible)",
+        nativeQuery = true)
     Page<Book> findAll(Pageable pageable);
 
     @Override

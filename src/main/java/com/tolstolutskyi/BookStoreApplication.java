@@ -59,7 +59,7 @@ public class BookStoreApplication {
             @Override
             public SecurityExpressionRoot getRootObject() {
                 Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-                return new SecurityExpressionRoot(authentication) {};
+                return new SecurityExpressionRoot(authentication) { };
             }
         };
     }

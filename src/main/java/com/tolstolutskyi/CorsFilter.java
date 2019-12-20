@@ -33,7 +33,7 @@ public class CorsFilter implements Filter {
             "Content-Type, Accept, X-Requested-With, remember-me, authorization");
 
         final HttpServletRequest httpServletRequest = (HttpServletRequest) req;
-        if("OPTIONS".equalsIgnoreCase(httpServletRequest.getMethod())) {
+        if ("OPTIONS".equalsIgnoreCase(httpServletRequest.getMethod())) {
             response.setStatus(HttpServletResponse.SC_OK);
         } else {
             chain.doFilter(req, res);

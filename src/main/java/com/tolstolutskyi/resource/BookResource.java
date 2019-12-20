@@ -25,7 +25,8 @@ public class BookResource {
     }
 
     @PostMapping("/{id}/image")
-    public Map<String, String> saveImage(@RequestParam("file") MultipartFile file, @PathVariable("id") long id) throws IOException {
+    public Map<String, String> saveImage(@RequestParam("file") MultipartFile file, @PathVariable("id") long id)
+        throws IOException {
         String link = imageService.saveImage(file);
         bookService.setImageLink(id, link);
         return Collections.singletonMap("photo", link);
