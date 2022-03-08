@@ -15,7 +15,7 @@
     </parent>
 
     <properties>
-        <liquibase.version>3.8.2</liquibase.version>
+        <liquibase.version>4.8.0</liquibase.version>
         <postgresql.version>42.1.4</postgresql.version>
         <h2.version>1.4.193</h2.version>
         <spring-security-oauth2.version>2.4.0.RELEASE</spring-security-oauth2.version>
